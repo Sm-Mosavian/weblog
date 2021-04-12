@@ -1,10 +1,13 @@
 package ir.sm.weblog.modules.users.model;
 import javax.persistence.*;
 
+
 import java.time.LocalDateTime;
 
 @Entity
+
 @Table(name = "users_tbl")
+
 public class Users {
 
     @Id
