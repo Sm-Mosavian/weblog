@@ -3,14 +3,13 @@ package ir.sm.weblog.modules.posts.controller;
 import ir.sm.weblog.modules.posts.model.Posts;
 import ir.sm.weblog.modules.posts.service.PostsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/posts")
 public class PostsController {
 
@@ -22,12 +21,23 @@ public class PostsController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<Posts> getPosts() {
+    public String showRegisterPosts() {
+        return "posts/registerPosts";    }
+
+
+        @RequestMapping(value = "", method = RequestMethod.POST)
+        public String registerPosts(@ModelAttribute Posts posts) throws IOException {
+            postsService.registerPost(posts);
+            return "posts/registerPosts";}
+
+    @RequestMapping(value = "/rest", method = RequestMethod.GET)
+    public @ResponseBody
+    List<Posts> getPosts() {
         return postsService.findAllPosts();
     }
 
-    @RequestMapping(value = {"/",""}, method = RequestMethod.POST)
-    public Posts registerPost(@RequestBody Posts posts) {
+    @RequestMapping(value = {"/rest",""}, method = RequestMethod.POST)
+    public @ResponseBody Posts registerPost(@RequestBody Posts posts) throws IOException {
         return postsService.registerPost(posts);
     }
 

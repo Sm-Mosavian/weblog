@@ -1,8 +1,12 @@
 package ir.sm.weblog.modules.posts.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import ir.sm.weblog.modules.users.model.Users;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -21,6 +25,10 @@ public class Posts {
     private String body;
     private String cover;
 
+    @Transient
+    @JsonIgnore
+    private MultipartFile file;
+
     @ManyToOne
     @JoinColumn(name = "user_fk")
     private Users users;
@@ -30,10 +38,12 @@ public class Posts {
     private List<Category> categories;
 
 
-    @Column(name = "created_at")
+    @Column(name = "created_at",updatable = false)
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
 
@@ -81,6 +91,14 @@ public class Posts {
 
     public void setCover(String cover) {
         this.cover = cover;
+    }
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 
     public Users getUsers() {
