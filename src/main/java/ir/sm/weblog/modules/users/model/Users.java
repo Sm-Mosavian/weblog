@@ -1,14 +1,19 @@
 package ir.sm.weblog.modules.users.model;
+import ir.sm.weblog.enums.Roles;
+import ir.sm.weblog.modules.posts.model.Posts;
+
 import javax.persistence.*;
 
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 
 @Table(name = "users_tbl")
 
-public class Users {
+public class Users implements Serializable {
 
     @Id
     @GeneratedValue
@@ -19,6 +24,41 @@ public class Users {
     private String password;
     private String name;
     private String cover;
+
+    private boolean enabled = true;
+
+    @ElementCollection(targetClass = Roles.class)
+    @CollectionTable(name = "authorities" , joinColumns =
+    @JoinColumn(name = "email", referencedColumnName = "email"))
+    @Enumerated(EnumType.STRING)
+    private List<Roles> roles;
+
+    @OneToMany(mappedBy = "users")
+    private List<Posts> posts;
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public List<Roles> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Roles> roles) {
+        this.roles = roles;
+    }
+
+    public List<Posts> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Posts> posts) {
+        this.posts = posts;
+    }
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
