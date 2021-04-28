@@ -5,6 +5,7 @@ import ir.sm.weblog.modules.posts.repository.CategoryRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,4 +28,11 @@ public class CategoryService {
     }
 
 
+    public Category findById(Long id) {
+        return  categoryRepository.getOne(id);
+    }
+@Transactional
+    public void deleteById(Long id) {
+        categoryRepository.deleteById(id);
+    }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -20,24 +21,27 @@ public class PostsController {
         this.postsService = postsService;
     }
 
+
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public String showRegisterPosts() {
-        return "posts/registerPosts";    }
+    public String posts() {
+        return "posts/posts";
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String registerPage() {
+        return "posts/registerPosts";
+    }
 
 
-        @RequestMapping(value = "", method = RequestMethod.POST)
-        public String registerPosts(@ModelAttribute Posts posts) throws IOException {
-            postsService.registerPost(posts);
-            return "posts/registerPosts";}
-
-    @RequestMapping(value = "/rest", method = RequestMethod.GET)
+    @RequestMapping(value = "/rest/getPosts", method = RequestMethod.GET)
     public @ResponseBody
     List<Posts> getPosts() {
         return postsService.findAllPosts();
     }
 
-    @RequestMapping(value = {"/rest",""}, method = RequestMethod.POST)
-    public @ResponseBody Posts registerPost(@RequestBody Posts posts) throws IOException {
+    @RequestMapping(value = "/rest/register", method = RequestMethod.POST)
+    public @ResponseBody
+    Posts registerPost(@RequestBody Posts posts) throws IOException {
         return postsService.registerPost(posts);
     }
 
