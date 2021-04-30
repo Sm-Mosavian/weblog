@@ -1,6 +1,8 @@
 package ir.sm.weblog.modules.users.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ir.sm.weblog.enums.Roles;
 import ir.sm.weblog.modules.posts.model.Posts;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 
@@ -36,6 +38,33 @@ public class Users implements Serializable {
     @OneToMany(mappedBy = "users")
     private List<Posts> posts;
 
+    @Transient
+    @JsonIgnore
+    private MultipartFile file;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    public Users() {
+    }
+
+    public Users(String email, String password, String name, String cover) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.cover = cover;
+    }
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
     public boolean isEnabled() {
         return enabled;
     }
@@ -58,22 +87,6 @@ public class Users implements Serializable {
 
     public void setPosts(List<Posts> posts) {
         this.posts = posts;
-    }
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    public Users() {
-    }
-
-    public Users(String email, String password, String name, String cover) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.cover = cover;
     }
 
     public Long getId() {
